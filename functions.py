@@ -27,6 +27,14 @@ if not DRIVER_LOCATION:
 global TYPE_ODDS
 TYPE_ODDS = "CLOSING"  # you can change to 'OPENING' if you want to collect opening odds, any other value will make the program collect CLOSING odds
 
+PROXY = os.getenv("PROXY_ADDRESS_FOR_SCRAPEOP", "")  # IP:PORT or HOST:PORT
+chrome_options = webdriver.ChromeOptions()
+if PROXY:
+    chrome_options.add_argument("--proxy-server=%s" % PROXY)
+
+# chrome = webdriver.Chrome(chrome_options=chrome_options)
+# chrome.get("http://google.com")
+
 
 def get_opening_odd(xpath):
     # I. Get the raw data by hovering and collecting
@@ -266,7 +274,9 @@ def scrape_current_tournament_typeA(sport, tournament, country, SEASON, max_page
     DATA_ALL = []
     for page in range(1, max_page):
         print("We start to scrape the page n°{}".format(page))
-        driver = webdriver.Chrome(executable_path=DRIVER_LOCATION)
+        driver = webdriver.Chrome(
+            executable_path=DRIVER_LOCATION, chrome_options=chrome_options
+        )
         data = scrape_page_typeA(page, sport, country, tournament, SEASON)
         DATA_ALL = DATA_ALL + [y for y in data if y != None]
         driver.close()
@@ -353,7 +363,9 @@ def scrape_current_season_typeA(tournament, sport, country, SEASON, max_page=25)
     DATA_ALL = []
     for page in range(1, max_page):
         print("We start to scrape the page n°{}".format(page))
-        driver = webdriver.Chrome(executable_path=DRIVER_LOCATION)
+        driver = webdriver.Chrome(
+            executable_path=DRIVER_LOCATION, chrome_options=chrome_options
+        )
         data = scrape_page_current_season_typeA(page, sport, country, tournament)
         DATA_ALL = DATA_ALL + [y for y in data if y != None]
         driver.close()
@@ -499,7 +511,9 @@ def scrape_next_games_typeA(tournament, sport, country, SEASON, nmax=30):
     global driver
     ############### NOW WE SEEK TO SCRAPE THE ODDS AND MATCH INFO################################
     DATA_ALL = []
-    driver = webdriver.Chrome(executable_path=DRIVER_LOCATION)
+    driver = webdriver.Chrome(
+        executable_path=DRIVER_LOCATION, chrome_options=chrome_options
+    )
     data = scrape_page_next_games_typeA(country, sport, tournament, nmax)
     DATA_ALL = DATA_ALL + [y for y in data if y != None]
     driver.close()
@@ -789,7 +803,9 @@ def scrape_current_tournament_typeB(
         alpha_game = [file["P1"].iloc[0], file["P2"].iloc[0], file["Date"].iloc[0]]
 
     print("We start to scrape the following tournament :", tournament)
-    driver = webdriver.Chrome(executable_path=DRIVER_LOCATION)
+    driver = webdriver.Chrome(
+        executable_path=DRIVER_LOCATION, chrome_options=chrome_options
+    )
     # SEASON = '''2020'''
     DATA_ALL = []
     for page in range(1, max_page + 1):
@@ -896,7 +912,9 @@ def scrape_next_games_typeB(
     Surface, bestof, tournament, country, name_to_write, SEASON="2020"
 ):
     global driver
-    driver = webdriver.Chrome(executable_path=DRIVER_LOCATION)
+    driver = webdriver.Chrome(
+        executable_path=DRIVER_LOCATION, chrome_options=chrome_options
+    )
     # SEASON = '''2020'''
     DATA_ALL = []
     for page in range(1):
@@ -1171,7 +1189,9 @@ def scrape_current_tournament_typeC(sport, tournament, country, SEASON, max_page
     DATA_ALL = []
     for page in range(1, max_page + 1):
         print("We start to scrape the page n°{}".format(page))
-        driver = webdriver.Chrome(executable_path=DRIVER_LOCATION)
+        driver = webdriver.Chrome(
+            executable_path=DRIVER_LOCATION, chrome_options=chrome_options
+        )
         data = scrape_page_typeC(page, sport, country, tournament, SEASON)
         DATA_ALL = DATA_ALL + [y for y in data if y != None]
         driver.close()
@@ -1254,7 +1274,9 @@ def scrape_current_season_typeC(tournament, sport, country, SEASON, max_page=25)
     DATA_ALL = []
     for page in range(1, max_page + 1):
         print("We start to scrape the page n°{}".format(page))
-        driver = webdriver.Chrome(executable_path=DRIVER_LOCATION)
+        driver = webdriver.Chrome(
+            executable_path=DRIVER_LOCATION, chrome_options=chrome_options
+        )
         data = scrape_page_current_season_typeC(page, sport, country, tournament)
         DATA_ALL = DATA_ALL + [y for y in data if y != None]
         driver.close()
@@ -1384,7 +1406,9 @@ def scrape_next_games_typeC(tournament, sport, country, SEASON, nmax=30):
     global driver
     ############### NOW WE SEEK TO SCRAPE THE ODDS AND MATCH INFO################################
     DATA_ALL = []
-    driver = webdriver.Chrome(executable_path=DRIVER_LOCATION)
+    driver = webdriver.Chrome(
+        executable_path=DRIVER_LOCATION, chrome_options=chrome_options
+    )
     data = scrape_page_next_games_typeC(country, sport, tournament, nmax)
     DATA_ALL = DATA_ALL + [y for y in data if y != None]
     driver.close()
@@ -1620,7 +1644,9 @@ def scrape_current_tournament_typeD(sport, tournament, country, SEASON, max_page
     DATA_ALL = []
     for page in range(1, max_page + 1):
         print("We start to scrape the page n°{}".format(page))
-        driver = webdriver.Chrome(executable_path=DRIVER_LOCATION)
+        driver = webdriver.Chrome(
+            executable_path=DRIVER_LOCATION, chrome_options=chrome_options
+        )
         data = scrape_page_typeD(page, sport, country, tournament, SEASON)
         DATA_ALL = DATA_ALL + [y for y in data if y != None]
         driver.close()
@@ -1701,7 +1727,9 @@ def scrape_current_season_typeD(tournament, sport, country, SEASON, max_page=25)
     DATA_ALL = []
     for page in range(1, max_page + 1):
         print("We start to scrape the page n°{}".format(page))
-        driver = webdriver.Chrome(executable_path=DRIVER_LOCATION)
+        driver = webdriver.Chrome(
+            executable_path=DRIVER_LOCATION, chrome_options=chrome_options
+        )
         data = scrape_page_current_season_typeD(page, sport, country, tournament)
         DATA_ALL = DATA_ALL + [y for y in data if y != None]
         driver.close()
@@ -1770,7 +1798,9 @@ def scrape_next_games_typeD(tournament, sport, country, SEASON, nmax=30):
     global driver
     ############### NOW WE SEEK TO SCRAPE THE ODDS AND MATCH INFO################################
     DATA_ALL = []
-    driver = webdriver.Chrome(executable_path=DRIVER_LOCATION)
+    driver = webdriver.Chrome(
+        executable_path=DRIVER_LOCATION, chrome_options=chrome_options
+    )
     data = scrape_page_next_games_typeD(country, sport, tournament, nmax)
     DATA_ALL = DATA_ALL + [y for y in data if y != None]
     driver.close()

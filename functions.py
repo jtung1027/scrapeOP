@@ -2,6 +2,7 @@
 
 
 import os
+import platform
 import re
 import time
 import warnings
@@ -12,6 +13,11 @@ from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 
 from create_clean_table import *
+
+if platform.system().lower() != "windows":
+    warnings.warn(
+        "This scraper works on Windows but not certain it works on other platforms."
+    )
 
 global DRIVER_LOCATION
 DRIVER_LOCATION = os.getenv("CHROME_DRIVER_PATH", "")

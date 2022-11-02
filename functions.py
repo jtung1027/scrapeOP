@@ -4,17 +4,19 @@
 import os
 import re
 import time
-
-import pandas as pd
+import warnings
 
 import matplotlib.pyplot as plt
-from create_clean_table import *
+import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
+
+from create_clean_table import *
 
 global DRIVER_LOCATION
-DRIVER_LOCATION = "C:\\Users\\Utilisateur\\Desktop\\chromedriver.exe"
+DRIVER_LOCATION = os.getenv("CHROME_DRIVER_PATH", "")
+if not DRIVER_LOCATION:
+    warnings.warn("DRIVER_LOCATION environment variable not set")
 
 global TYPE_ODDS
 TYPE_ODDS = "CLOSING"  # you can change to 'OPENING' if you want to collect opening odds, any other value will make the program collect CLOSING odds

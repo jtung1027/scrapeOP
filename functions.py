@@ -2248,7 +2248,7 @@ def scrape_oddsportal_specific_season(
         "volleyball",
     ]:
         df = scrape_current_tournament_typeA(
-            sport, tournament, country, season, max_page=max_page
+            sport, league, country, season, max_page=max_page
         )
         df = create_clean_table_two_ways(df)
     # elif sport in ['tennis']:

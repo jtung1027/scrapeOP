@@ -298,7 +298,7 @@ def scrape_current_tournament_typeA(sport, tournament, country, SEASON, max_page
     """Now we simply need to split team names, transform date, split score"""
 
     # (0) Filter out None rows
-    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index()
+    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index().copy()
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:
@@ -386,7 +386,7 @@ def scrape_current_season_typeA(tournament, sport, country, SEASON, max_page=25)
     """Now we simply need to split team names, transform date, split score"""
 
     # (0) Filter out None rows
-    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index()
+    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index().copy()
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:
@@ -530,7 +530,7 @@ def scrape_next_games_typeA(tournament, sport, country, SEASON, nmax=30):
     """Now we simply need to split team names, transform date, split score"""
 
     # (0) Filter out None rows
-    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index()
+    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index().copy()
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:
@@ -1215,7 +1215,7 @@ def scrape_current_tournament_typeC(sport, tournament, country, SEASON, max_page
     """Now we simply need to split team names, transform date, split score"""
 
     # (0) Filter out None rows
-    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index()
+    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index().copy()
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:
@@ -1298,7 +1298,7 @@ def scrape_current_season_typeC(tournament, sport, country, SEASON, max_page=25)
     """Now we simply need to split team names, transform date, split score"""
 
     # (0) Filter out None rows
-    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index()
+    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index().copy()
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:
@@ -1434,7 +1434,7 @@ def scrape_next_games_typeC(tournament, sport, country, SEASON, nmax=30):
     """Now we simply need to split team names, transform date, split score"""
 
     # (0) Filter out None rows
-    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index()
+    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index().copy()
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:
@@ -1668,7 +1668,7 @@ def scrape_current_tournament_typeD(sport, tournament, country, SEASON, max_page
     """Now we simply need to split team names, transform date, split score"""
 
     # (0) Filter out None rows
-    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index()
+    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index().copy()
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:
@@ -1751,7 +1751,7 @@ def scrape_current_season_typeD(tournament, sport, country, SEASON, max_page=25)
     """Now we simply need to split team names, transform date, split score"""
 
     # (0) Filter out None rows
-    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index()
+    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index().copy()
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:
@@ -1824,7 +1824,7 @@ def scrape_next_games_typeD(tournament, sport, country, SEASON, nmax=30):
     """Now we simply need to split team names, transform date, split score"""
 
     # (0) Filter out None rows
-    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index()
+    data_df = data_df[~data_df["Bookmaker"].isnull()].dropna().reset_index().copy()
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:

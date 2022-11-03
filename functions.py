@@ -339,7 +339,7 @@ def scrape_current_tournament_typeA(sport, tournament, country, SEASON, max_page
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:
-            data_df["TO_KEEP"].iloc[i] = 0
+            data_df["TO_KEEP"].values[i] = 0
 
     data_df = data_df[data_df["TO_KEEP"] == 1]
 
@@ -352,12 +352,12 @@ def scrape_current_tournament_typeA(sport, tournament, country, SEASON, max_page
     data_df["Score_home"] = [re.split(":", y)[0][-3:] for y in data_df["ScoreRaw"]]
     data_df["Score_away"] = [re.split(":", y)[1][:3] for y in data_df["ScoreRaw"]]
     for j in range(len(data_df["Score_home"])):
-        str_home = data_df["Score_home"].iloc[j]
-        str_away = data_df["Score_away"].iloc[j]
+        str_home = data_df["Score_home"].values[j]
+        str_away = data_df["Score_away"].values[j]
         if str_home[0] == "t":
-            data_df["Score_home"].iloc[j] = str_home[1:]
+            data_df["Score_home"].values[j] = str_home[1:]
         if str_away[-1] == "(":
-            data_df["Score_away"].iloc[j] = str_away[:-1]
+            data_df["Score_away"].values[j] = str_away[:-1]
     # (e) Set season column
     data_df["Season"] = SEASON
     # Finally we save results
@@ -427,7 +427,7 @@ def scrape_current_season_typeA(tournament, sport, country, SEASON, max_page=25)
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:
-            data_df["TO_KEEP"].iloc[i] = 0
+            data_df["TO_KEEP"].values[i] = 0
 
     data_df = data_df[data_df["TO_KEEP"] == 1]
     # (a) Split team names
@@ -440,12 +440,12 @@ def scrape_current_season_typeA(tournament, sport, country, SEASON, max_page=25)
     data_df["Score_away"] = [re.split(":", y)[1][:3] for y in data_df["ScoreRaw"]]
 
     for j in range(len(data_df["Score_home"])):
-        str_home = data_df["Score_home"].iloc[j]
-        str_away = data_df["Score_away"].iloc[j]
+        str_home = data_df["Score_home"].values[j]
+        str_away = data_df["Score_away"].values[j]
         if str_home[0] == "t":
-            data_df["Score_home"].iloc[j] = str_home[1:]
+            data_df["Score_home"].values[j] = str_home[1:]
         if str_away[-1] == "(":
-            data_df["Score_away"].iloc[j] = str_away[:-1]
+            data_df["Score_away"].values[j] = str_away[:-1]
 
     # (e) Set season column
     data_df["Season"] = SEASON
@@ -533,11 +533,11 @@ def scrape_league_typeA(
 
     # Correct falsly collected data for away (in case of 1X2 instead of H/A odds)
     for i in range(file1.shape[0]):
-        if (1 / file1["OddHome"].iloc[i] + 1 / file1["OddAway"].iloc[i]) < 1:
-            file1["OddAway"].iloc[i] = 1 / (
-                (1 - 1 / file1["OddHome"].iloc[i]) * 1.07
+        if (1 / file1["OddHome"].values[i] + 1 / file1["OddAway"].values[i]) < 1:
+            file1["OddAway"].values[i] = 1 / (
+                (1 - 1 / file1["OddHome"].values[i]) * 1.07
             )  #  1/1.07 = 0.934 => 6.5 % margin (estimation)
-            print(file1["OddHome"].iloc[i], file1["OddAway"].iloc[i], i)
+            print(file1["OddHome"].values[i], file1["OddAway"].values[i], i)
     file1.to_csv("./{}/All_data_{}.csv".format(tournament1, tournament1))
 
     print("All good! ")
@@ -571,7 +571,7 @@ def scrape_next_games_typeA(tournament, sport, country, SEASON, nmax=30):
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:
-            data_df["TO_KEEP"].iloc[i] = 0
+            data_df["TO_KEEP"].values[i] = 0
 
     data_df = data_df[data_df["TO_KEEP"] == 1]
 
@@ -837,7 +837,7 @@ def scrape_current_tournament_typeB(
             sep=";",
             encoding="utf-8",
         )
-        alpha_game = [file["P1"].iloc[0], file["P2"].iloc[0], file["Date"].iloc[0]]
+        alpha_game = [file["P1"].values[0], file["P2"].values[0], file["Date"].values[0]]
 
     print("We start to scrape the following tournament :", tournament)
     driver = webdriver.Chrome(
@@ -1256,7 +1256,7 @@ def scrape_current_tournament_typeC(sport, tournament, country, SEASON, max_page
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:
-            data_df["TO_KEEP"].iloc[i] = 0
+            data_df["TO_KEEP"].values[i] = 0
 
     data_df = data_df[data_df["TO_KEEP"] == 1]
 
@@ -1339,7 +1339,7 @@ def scrape_current_season_typeC(tournament, sport, country, SEASON, max_page=25)
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:
-            data_df["TO_KEEP"].iloc[i] = 0
+            data_df["TO_KEEP"].values[i] = 0
 
     data_df = data_df[data_df["TO_KEEP"] == 1]
     # (a) Split team names
@@ -1475,7 +1475,7 @@ def scrape_next_games_typeC(tournament, sport, country, SEASON, nmax=30):
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:
-            data_df["TO_KEEP"].iloc[i] = 0
+            data_df["TO_KEEP"].values[i] = 0
 
     data_df = data_df[data_df["TO_KEEP"] == 1]
 
@@ -1709,7 +1709,7 @@ def scrape_current_tournament_typeD(sport, tournament, country, SEASON, max_page
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:
-            data_df["TO_KEEP"].iloc[i] = 0
+            data_df["TO_KEEP"].values[i] = 0
 
     data_df = data_df[data_df["TO_KEEP"] == 1]
     # (a) Split team names
@@ -1792,7 +1792,7 @@ def scrape_current_season_typeD(tournament, sport, country, SEASON, max_page=25)
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:
-            data_df["TO_KEEP"].iloc[i] = 0
+            data_df["TO_KEEP"].values[i] = 0
     data_df = data_df[data_df["TO_KEEP"] == 1]
     # (a) Split team names
     data_df["Home_id"] = [re.split(" - ", y)[0] for y in data_df["TeamsRaw"]]
@@ -1865,7 +1865,7 @@ def scrape_next_games_typeD(tournament, sport, country, SEASON, nmax=30):
     data_df["TO_KEEP"] = 1
     for i in range(len(data_df["TO_KEEP"])):
         if len(re.split(":", data_df["ScoreRaw"][i])) < 2:
-            data_df["TO_KEEP"].iloc[i] = 0
+            data_df["TO_KEEP"].values[i] = 0
 
     data_df = data_df[data_df["TO_KEEP"] == 1]
 
@@ -1959,11 +1959,11 @@ def scrape_league_typeD(
 
     # Correct falsly collected data for away (in case of 1X2 instead of H/A odds)
     for i in range(file1.shape[0]):
-        if (1 / file1["OddHome"].iloc[i] + 1 / file1["OddAway"].iloc[i]) < 1:
-            file1["OddAway"].iloc[i] = 1 / (
-                (1 - 1 / file1["OddHome"].iloc[i]) * 1.07
+        if (1 / file1["OddHome"].values[i] + 1 / file1["OddAway"].values[i]) < 1:
+            file1["OddAway"].values[i] = 1 / (
+                (1 - 1 / file1["OddHome"].values[i]) * 1.07
             )  #  1/1.07 = 0.934 => 6.5 % margin (estimation)
-            print(file1["OddHome"].iloc[i], file1["OddAway"].iloc[i], i)
+            print(file1["OddHome"].values[i], file1["OddAway"].values[i], i)
     file1.to_csv("./{}/All_data_{}.csv".format(tournament1, tournament1))
 
     print("All good! ")

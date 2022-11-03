@@ -12,8 +12,6 @@ import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 
-from create_clean_table import *
-
 if platform.system().lower() != "windows":
     warnings.warn(
         "This scraper works on Windows but not certain it works on other platforms."
@@ -34,6 +32,45 @@ if PROXY:
 
 # chrome = webdriver.Chrome(chrome_options=chrome_options)
 # chrome.get("http://google.com")
+
+
+def create_clean_table(df):
+    """
+    Pivots the original table so that there's one row per game
+    and every bookmaker's odds for each outcome is in its own column
+    """
+
+    # create and merge our own MatchID
+    df = df.merge(
+        df[["Date", "Home_id", "Away_id"]]
+        .drop_duplicates()
+        .assign(MatchId=lambda df: [x + 1 for x in range(df.shape[0])]),
+        how="inner",
+        on=["Date", "Home_id", "Away_id"],
+        validate="m:1",
+    )
+
+    cols = [
+        "MatchId",
+        "Season",
+        "Home_id",
+        "Away_id",
+        "Date",
+        "Score_home",
+        "Score_away",
+    ]
+    df = df.drop_duplicates(cols + ["Bookmaker"], keep="first")
+
+    odds_cols = ["OddHome", "OddAway"]
+    if "OddDraw" in df.columns:
+        odds_cols.append("OddDraw")
+
+    df_final = df.pivot(index=cols, columns=["Bookmaker"], values=odds_cols)
+    df_final.columns = [f"{tup[1]}_{tup[0][3]}" for tup in df_final.columns.values]
+    df_final = df_final.reset_index(drop=False)
+    return df_final.assign(
+        Date=lambda df: df["Date"].apply(lambda x: pd.to_datetime(x))
+    ).sort_values("Date")
 
 
 def get_opening_odd(xpath):
@@ -1985,7 +2022,6 @@ def scrape_oddsportal_current_season(
             SEASON=season,
             max_page=max_page,
         )
-        df = create_clean_table_two_ways(df)
     elif sport in ["tennis"]:
         df = scrape_current_tournament_typeB(
             Surface=surface,
@@ -1996,7 +2032,6 @@ def scrape_oddsportal_current_season(
             SEASON=season,
             max_page=25,
         )
-        df = create_clean_table_two_ways(df)
     elif sport in ["soccer", "rugby-union", "rugby-league", "handball"]:
         df = scrape_current_season_typeC(
             tournament=league,
@@ -2005,7 +2040,6 @@ def scrape_oddsportal_current_season(
             SEASON=season,
             max_page=max_page,
         )
-        df = create_clean_table_three_ways(df)
     elif sport in ["hockey"]:
         df = scrape_current_season_typeD(
             tournament=league,
@@ -2014,7 +2048,7 @@ def scrape_oddsportal_current_season(
             SEASON=season,
             max_page=max_page,
         )
-        df = create_clean_table_two_ways(df)
+    df = create_clean_table(df)
 
     if not os.path.exists("./{}".format(sport)):
         os.makedirs("./{}".format(sport))
@@ -2085,7 +2119,6 @@ def scrape_oddsportal_historical(
             current_season="yes",
             max_page=max_page,
         )
-        df = create_clean_table_two_ways(df)
     # elif sport in ['tennis']:
     # df = scrape_league_typeB(Surface = surface, bestof = bestof, Season = start_season, country1 = country, tournament1 = league, nseason = nseasons)
     # df = create_clean_table_two_ways(df)
@@ -2099,7 +2132,6 @@ def scrape_oddsportal_historical(
             current_season="yes",
             max_page=max_page,
         )
-        df = create_clean_table_three_ways(df)
     elif sport in ["hockey"]:
         df = scrape_league_typeD(
             Season=start_season,
@@ -2110,7 +2142,7 @@ def scrape_oddsportal_historical(
             current_season="yes",
             max_page=max_page,
         )
-        df = create_clean_table_two_ways(df)
+    df = create_clean_table(df)
 
     if not os.path.exists("./{}".format(sport)):
         os.makedirs("./{}".format(sport))
@@ -2168,7 +2200,6 @@ def scrape_oddsportal_next_games(
         df = scrape_next_games_typeA(
             tournament=league, sport=sport, country=country, SEASON=season, nmax=nmax
         )
-        df = create_clean_table_two_ways(df)
     elif sport in ["tennis"]:
         df = scrape_next_games_typeB(
             Surface=surface,
@@ -2178,17 +2209,15 @@ def scrape_oddsportal_next_games(
             name_to_write=league,
             SEASON="2020",
         )
-        df = create_clean_table_two_ways(df)
     elif sport in ["soccer", "rugby-union", "rugby-league", "handball"]:
         df = scrape_next_games_typeC(
             tournament=league, sport=sport, country=country, SEASON=season, nmax=nmax
         )
-        df = create_clean_table_three_ways(df)
     elif sport in ["hockey"]:
         df = scrape_next_games_typeD(
             tournament=league, sport=sport, country=country, SEASON=season, nmax=nmax
         )
-        df = create_clean_table_two_ways(df)
+    df = create_clean_table(df)
 
     if not os.path.exists("./{}".format(sport)):
         os.makedirs("./{}".format(sport))
@@ -2250,7 +2279,6 @@ def scrape_oddsportal_specific_season(
         df = scrape_current_tournament_typeA(
             sport, league, country, season, max_page=max_page
         )
-        df = create_clean_table_two_ways(df)
     # elif sport in ['tennis']:
     # df = scrape_current_tournament_typeB(Surface = surface, bestof = bestof, tournament = league, country = country,\
     # name_to_write = league, SEASON = season)
@@ -2263,7 +2291,6 @@ def scrape_oddsportal_specific_season(
             SEASON=season,
             max_page=max_page,
         )
-        df = create_clean_table_three_ways(df)
     elif sport in ["hockey"]:
         df = scrape_current_tournament_typeD(
             sport=sport,
@@ -2272,7 +2299,7 @@ def scrape_oddsportal_specific_season(
             SEASON=season,
             max_page=max_page,
         )
-        df = create_clean_table_two_ways(df)
+    df = create_clean_table(df)
 
     if not os.path.exists("./{}".format(sport)):
         os.makedirs("./{}".format(sport))
